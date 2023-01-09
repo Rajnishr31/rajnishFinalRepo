@@ -11,6 +11,9 @@
     "url": "git+https://github.com/Tapaswee2001Samantaray/project-internshipGroup14.git"
   },
   "author": "",
-  "license": "ISC"
-  
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.18.2",
+    "mongoose": "^6.8.3"
+  }
 }
