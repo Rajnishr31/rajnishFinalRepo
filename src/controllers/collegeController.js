@@ -27,6 +27,11 @@ const createCollege = async function (req, res) {
                 return res.status(400).send({ status: false, message: "Please, provide valid name." });
             }
            
+            const uniqueName = await collegeModel.findOne({name : name});
+            if(uniqueName){
+                return res.status(400).send({status:false , message:"Name is already exist . Give unique name."});
+            }
+
             if (!fullName || fullName == "") {
                 return res.status(400).send({ status: false, message: "FullName is required." });
             }
