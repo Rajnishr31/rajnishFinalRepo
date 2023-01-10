@@ -95,7 +95,7 @@ const getdata = async (req, res) => {
 
             interns._doc.interns = x;
 
-            res.status(200).send({ status: false, data: interns });
+            res.status(200).send({ status: true, data: interns });
         } else {
             return res.status(400).send({ status: false, message: "Invalid Request." });
         }
