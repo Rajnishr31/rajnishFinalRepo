@@ -4,7 +4,6 @@ const collegeModel = require("../models/collegeModel");
 
 //==========regex for name and mobile=============
 let nameRegex = /^[a-z A-Z]{1,20}$/
-// let mobileRegex = /^[\+]?[(]?[0-9]{3}[)]?[-\s\.]?[0-9]{3}[-\s\.]?[0-9]{4,6}$/
 let mobileRegex = /^[6-9]\d{9}$/
 
 
