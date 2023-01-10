@@ -100,7 +100,7 @@ const getdata = async (req, res) => {
             return res.status(400).send({ status: false, message: "Invalid Request." });
         }
     } catch (error) {
-        res.status(500).send({ status: false, message: error.message });
+        return res.status(500).send({ status: false, message: error.message });
     }
 }
 
