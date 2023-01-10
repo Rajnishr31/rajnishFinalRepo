@@ -1,12 +1,14 @@
 const emailValidator = require("email-validator");
-// const mobileNoValidator = require("validate-phone-number-node-js");
 const internModel = require("../models/internModel");
 const collegeModel = require("../models/collegeModel");
 
+//==========regex for name and mobile=============
 let nameRegex = /^[a-z A-Z]{1,20}$/
-// let mobileRegex = /^[6-9]\d{9}$/gi
 let mobileRegex = /^[\+]?[(]?[0-9]{3}[)]?[-\s\.]?[0-9]{3}[-\s\.]?[0-9]{4,6}$/
 
+
+
+//=================route handler for create intern================
 let createIntern = async function (req, res) {
     try {
         let data = req.body;
@@ -58,6 +60,7 @@ let createIntern = async function (req, res) {
             const createInterns = await internModel.create(data);
 
             const result = await internModel.findById(createInterns._id).select({ _id: 0, createdAt: 0, updatedAt: 0, __v: 0 });
+            
             res.status(201).send({ status: true, data: result });
         } else {
             return res.status(400).send({ status: false, message: "Invalid request." });
@@ -67,23 +70,28 @@ let createIntern = async function (req, res) {
     }
 }
 
+
+
+//==============route handler for get all interns==================
 const getdata = async (req, res) => {
     try {
         const data = req.query.collegeName
         if (Object.keys(req.query).length != 0) {
-            let getall = await collegeModel.findOne({name: data });
-            
+
+            let getall = await collegeModel.findOne({ name: data });
+
             if (!getall) {
                 return res.status(404).send({ status: false, message: "Data not found." });
             }
             let Id = getall._id;
-            console.log(Id);
+
             let finaldata = await internModel.find({ collegeId: Id }).select({ name: 1, email: 1, mobile: 1, _id: 1 });
             if (finaldata.length == 0) {
-                return res.status(404).send({ status: false, message: "No interns." });
+                return res.status(404).send({ status: false, message: "No interns have applied for this college." });
             }
+
             let x = finaldata;
-            let interns = await collegeModel.findOne({ name:data }).select({ _id: 0, createdAt: 0, updatedAt: 0, __v: 0, isDeleted: 0 })
+            let interns = await collegeModel.findOne({ name: data }).select({ _id: 0, createdAt: 0, updatedAt: 0, __v: 0, isDeleted: 0 })
 
             interns._doc.interns = x;
 
