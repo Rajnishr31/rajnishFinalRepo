@@ -68,3 +68,4 @@ const createCollege = async function (req, res) {
 
 
 module.exports = { createCollege };
+
