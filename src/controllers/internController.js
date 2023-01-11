@@ -51,16 +51,16 @@ let createIntern = async function (req, res) {
                 return res.status(400).send({ status: false, message: "Invalid request , College Name is mandatory" });
             }
 
-            const findCollegeId = await collegeModel.findOne({ name: collegeName }).select({ _id: 1 });
+            const findCollegeId = await collegeModel.findOne({ name: collegeName , isDeleted:false}).select({ _id: 1 });
             if (!findCollegeId) {
-                return res.status(404).send({ status: false, message: "No college found , please enter valid college name." });
+                return res.status(404).send({ status: false, message: "No college found , please enter valid college name or College has deleted." });
             }
             data.collegeId = findCollegeId._id;
 
             const createInterns = await internModel.create(data);
 
             const result = await internModel.findById(createInterns._id).select({ _id: 0, createdAt: 0, updatedAt: 0, __v: 0 });
-            
+
             res.status(201).send({ status: true, data: result });
         } else {
             return res.status(400).send({ status: false, message: "Invalid request." });
@@ -78,24 +78,24 @@ const getdata = async (req, res) => {
         const data = req.query.collegeName
         if (Object.keys(req.query).length != 0) {
 
-            let getall = await collegeModel.findOne({ name: data });
+            let getAll = await collegeModel.findOne({ name: data, isDeleted: false });
 
-            if (!getall) {
-                return res.status(404).send({ status: false, message: "Data not found." });
+            if (!getAll) {
+                return res.status(404).send({ status: false, message: "Data not found or College already deleted." });
             }
-            let Id = getall._id;
+            let Id = getAll._id;
 
-            let finaldata = await internModel.find({ collegeId: Id }).select({ name: 1, email: 1, mobile: 1, _id: 1 });
-            if (finaldata.length == 0) {
+            let internsData = await internModel.find({ collegeId: Id, isDeleted: false }).select({ name: 1, email: 1, mobile: 1, _id: 1 });
+            if (internsData.length == 0) {
                 return res.status(404).send({ status: false, message: "No interns have applied for this college." });
             }
 
-            let x = finaldata;
-            let interns = await collegeModel.findOne({ name: data }).select({ _id: 0, createdAt: 0, updatedAt: 0, __v: 0, isDeleted: 0 })
+            let x = internsData;
+            let collegeData = await collegeModel.findOne({ name: data }).select({ _id: 0, createdAt: 0, updatedAt: 0, __v: 0, isDeleted: 0 })
 
-            interns._doc.interns = x;
+            collegeData._doc.interns = x;
 
-            res.status(200).send({ status: true, data: interns });
+            res.status(200).send({ status: true, data: collegeData });
         } else {
             return res.status(400).send({ status: false, message: "Invalid Request." });
         }
