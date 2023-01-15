@@ -1,15 +1,11 @@
 const express = require("express");
 const router = express.Router();
-const interController = require("../controllers/internController");
-const collegeController = require("../controllers/collegeController");
+const coinController = require("../controller/coinController");
 
-router.post("/functionup/colleges", collegeController.createCollege);
-router.post("/functionup/interns", interController.createIntern);
-router.get("/functionup/collegeDetails", interController.getdata);
-
+router.get("/assets", coinController.getCoins);
 router.all("/*", function (req, res) {
-    res.status(400).send({ status: false, message: "Please Input valid URL." });
-});
+    res.status(400).send({ status: false, message: "Please Enter a valid URL." });
+})
 
 
 module.exports = router;
