@@ -4,9 +4,9 @@ const mongoose = require('mongoose')
 const route = require('./route/route')
 mongoose.set('strictQuery', false)
 const app = express()
-
+const cors = require("cors")
 app.use(express.json())
-
+app.use(cors())
 mongoose.connect("mongodb+srv://shyamgupta:.T!8NRrzf6FyMYc@cluster0.dbdyccj.mongodb.net/x-room20")
 .then(()=>console.log('MONGO DB IS CONNECTED'))
 .catch((err)=>console.log(err.message))
